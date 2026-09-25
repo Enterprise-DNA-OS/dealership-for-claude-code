@@ -2,12 +2,55 @@
   {
     "name": "week",
     "title": "This week",
-    "subtitle": "Dealership for Claude Code: what needs attention, rendered by npm run view",
+    "subtitle": "Dealership for Claude Code: the lot, the workshop and what needs attention, rendered by npm run view",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Needs a decision",
+        "note": "Worst first. A delivered vehicle with no PPSR check outranks everything.",
+        "sql": "select reason, label, who, place, detail from v_attention order by rank, days desc nulls last limit 15"
+      },
+      {
+        "title": "Today in the workshop",
+        "sql": "select ref, promised_at as at, unit, customer, technician as tech, type, reason, state from v_ros where on_date = current_date and status in ('booked', 'open') order by promised_at nulls last"
+      },
+      {
+        "title": "Deals in play",
+        "note": "Deposits and quotes, with the compliance paper each unit still needs before it can deliver.",
+        "sql": "select ref, unit, customer, salesperson, opened_on, round(sale_price_cents / 100.0, 2) as price_nzd, case when cin_completed_on is null then 'CIN ' else '' end || case when ppsr_checked_on is null then 'PPSR ' else '' end || case when wof_issued_on is null or current_date - wof_issued_on > 30 then 'WoF' else '' end as paper_needed, state from v_deals where status in ('quote', 'deposit') order by opened_on"
+      },
+      {
+        "title": "Service due",
+        "note": "Every car we sold or serviced that has gone quiet. One call each.",
+        "sql": "select ref, unit, plate, owner, phone, last_seen_on, days_since, state from v_service_due order by days_since desc"
+      }
+    ]
+  },
+  {
+    "name": "money",
+    "title": "The money",
+    "subtitle": "Dealership for Claude Code: what is owed, unbilled, aged and low, rendered by npm run view",
+    "sections": [
+      {
+        "title": "Owing",
+        "sql": "select ref, customer, unit, issued_on, due_on, round(total_cents / 100.0, 2) as total_nzd, state from v_invoices where status = 'issued' order by due_on"
+      },
+      {
+        "title": "Unbilled work",
+        "note": "Completed customer jobs with charges and no invoice. This is the write-off queue if nobody acts.",
+        "sql": "select ref, on_date, unit, customer, technician as tech, round(value_cents / 100.0, 2) as value_nzd from v_ros where state = 'unbilled' order by on_date"
+      },
+      {
+        "title": "Aged stock",
+        "note": "Days on the lot, recon sunk in, and the floorplan interest the unit has quietly cost.",
+        "sql": "select ref, unit, source, days_in_stock, round(cost_cents / 100.0, 2) as cost_nzd, round(recon_cents / 100.0, 2) as recon_nzd, round(asking_cents / 100.0, 2) as asking_nzd, round(floorplan_interest_cents / 100.0, 2) as interest_nzd from v_vehicles where kind = 'stock' and status = 'in_stock' and days_in_stock >= (select aged_days from v_settings) order by days_in_stock desc"
+      },
+      {
+        "title": "Front-end gross by salesperson, last 28 days",
+        "sql": "select s.name as salesperson, (select count(*) from deals d where d.staff_id = s.id and d.status = 'delivered' and d.delivered_on >= current_date - 28) as delivered, round((select coalesce(sum(v.gross_cents), 0) from v_deals v where v.staff_id = s.id and v.status = 'delivered' and v.delivered_on >= current_date - 28) / 100.0, 2) as gross_nzd from staff s where s.status = 'active' and s.role in ('sales', 'manager') order by gross_nzd desc"
+      },
+      {
+        "title": "Parts alerts",
+        "sql": "select code, name, stock_qty as on_hand, unit, reorder_at, state from v_parts where state <> 'ok' order by state"
       }
     ]
   }

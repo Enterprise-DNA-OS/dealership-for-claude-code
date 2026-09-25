@@ -39,11 +39,11 @@
 
 Dealership for Claude Code does the job you pay CDK Global for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the CDK Global dashboard cannot.
 
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays CDK Global per year, all in, with a source. -->
+The bill this replaces is not small. CDK's own materials put the average dealership's monthly spend near USD $30,000 once the usual ten to fifteen bolt-on modules are counted ([Software Advice's CDK Drive profile](https://www.softwareadvice.com/crm/cdk-drive-profile/)), and third-party tools pay CDK $175 to $700 a month per rooftop just to reach the dealer's own data ([DealerRefresh](https://forum.dealerrefresh.com/threads/cdk-third-party-access-pricing-guide.5345/)). In Australia and New Zealand the same play runs through Pentana eraPower and Titan DMS on unpublished per-rooftop quotes. And in June 2024, when CDK was hit by ransomware, roughly 15,000 dealerships could not sell a car or close a repair order for the better part of two weeks, because the operating record lived in someone else's cloud.
 
 Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://calendly.com/sam-mckay/discovery-call).
 
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
+This one covers the operating record of a used-vehicle dealership with a workshop: the customers, the stock on the lot with its compliance paper (CIN, PPSR, WoF), the deals from quote to delivery, the repair orders, the parts shelf and the invoices. The New Zealand rules are built in as gates with their sources cited: a unit takes no deposit without a Consumer Information Notice, nothing delivers without a PPSR search, a WoF inspection only happens under a currently authorised inspector, and $10,000 of cash needs customer due diligence on record first. The general ledger and payroll stay with your accountant, deliberately; one export hands them everything.
 
 ## Why no front end
 
@@ -62,7 +62,7 @@ npm install
 npm run demo
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Then open the folder in Claude Code and type `/attention`. The demo dealership has a delivered ute with no PPSR check, three units on the yard without a CIN, and a technician holding WoF bookings on an expired authorisation; the answer shows you exactly how this system thinks.
 
 ### Use it with your own Postgres or Supabase
 
@@ -70,15 +70,68 @@ Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same 
 
 ## The commands
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
-
 | Command | What it does |
 |---|---|
-| `/...` | ... |
+| `/attention` | Everything that wants a decision, worst first. A PPSR hole outranks everything |
+| `/lot` | The yard on one screen: days in, recon, floorplan interest, the paper on every unit |
+| `/aged` | Units past the aged line with the interest bill each has quietly run up |
+| `/vehicle` | One unit's whole card: paper, deals, workshop history, notes |
+| `/stock-in` | A trade or auction buy into stock, odometer first, then the paper walk |
+| `/deals` | The board: deposits (and which are going stale), quotes, deliveries with gross |
+| `/deal` | Quote to delivery through the gates: CIN at deposit; PPSR, WoF and cash CDD at delivery |
+| `/sales` | Delivered units and true front-end gross by salesperson, last 28 days |
+| `/workshop` | Today's board plus anything unresolved from earlier days |
+| `/service-due` | Every car we sold or serviced that has gone quiet: the retention call sheet |
+| `/customer` `/customers` | One customer's whole history; the list with last-seen dates |
+| `/team` | Staff with inspector authorisations, WoF loads, deals and deliveries |
+| `/debtors` `/unbilled` | Who owes money; finished work nobody invoiced |
+| `/parts` | The shelf: out, low, receive stock in |
+| `/compliance` | The rule book run against the records, sources cited |
+| `/weekly-review` | The Monday review written from four commands |
+| `/log` | A call, a promise, a pricing decision, onto the record |
+| `/draft-offer` `/draft-service-reminders` | Drafts to `drafts/`; a person sends them |
+| `/import` | Bring the dealership across from CDK, dry-run first |
+| `/customise` | Change a field, a threshold, a rule, a document, in plain language |
+| `/new-view` | A new read-only dashboard page, described in plain language |
 
-## Instead of cdk
+## Instead of CDK Global
 
-<!-- TODO(author): how to bring data across from CDK Global; link docs/replace-cdk.md -->
+Export your customer and inventory lists from CDK (or Pentana, Titan, or any DMS that prints to CSV), then:
+
+```bash
+node scripts/dealer.mjs import cdk --customers=customers.csv --vehicles=vehicles.csv --dry-run
+node scripts/dealer.mjs import cdk --customers=customers.csv --vehicles=vehicles.csv
+```
+
+The importer matches common column-name variants, is idempotent (re-running updates instead of duplicating), and names every row it skips. Every imported unit deliberately arrives with no CIN and no PPSR on record: the paper gets verified on the way in, not assumed from the old system. [docs/replace-cdk.md](docs/replace-cdk.md) covers exactly what carries over and what starts fresh, and why.
+
+### Ten questions your DMS dashboard cannot answer
+
+Each of these is one plain-language ask away in Claude Code, because the record is a database you own:
+
+1. What has every aged unit cost me in floorplan interest, unit by unit, so far?
+2. What is the true front-end gross per salesperson once recon is counted against each unit?
+3. Which acquisition source (trade-in, auction, import) actually makes money after recon?
+4. Which buyers from the last two years have never once been back to our workshop?
+5. Which delivered units are missing a PPSR search or a fresh WoF on the record, right now?
+6. Which deals died last quarter, at whose hands, for what stated reason?
+7. Which deposits are more than a fortnight old and still have not delivered, and why?
+8. Which finished workshop jobs were never invoiced, and what do they total?
+9. Whose inspector authorisation or trader registration lapses inside 30 days?
+10. Which parts have not moved in 90 days, and what is tied up in them?
+
+## Your first hour: ten things to ask for
+
+1. "Walk me through everything on the attention list and what clears each one."
+2. "Which units are missing paper, and record the CIN on the Commodore."
+3. "What has the Hilux cost us in floorplan interest, and what should it be priced at to move?"
+4. "Show me true gross by salesperson, recon counted."
+5. "Ring list: everyone whose car we have not seen in six months."
+6. "Draft the service reminders for that list."
+7. "Change the aged line to 60 days." (a one-line settings change)
+8. "Book the Ranger in for a WoF with Dev on Thursday at 10."
+9. "Import our customer list from the old system, dry run first."
+10. "Add a page that shows this month's deliveries by acquisition source."
 
 ## Architecture
 

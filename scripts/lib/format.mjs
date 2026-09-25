@@ -1,6 +1,8 @@
 // Text output helpers: aligned tables, money, hours, dates.
 
 export function money(cents, currency = 'NZD') {
+  // table() hands formatters (value, row); a non-string second arg is not a currency.
+  if (typeof currency !== 'string') currency = 'NZD';
   const n = Number(cents || 0) / 100;
   try {
     return new Intl.NumberFormat('en-NZ', {
@@ -16,6 +18,7 @@ export function money(cents, currency = 'NZD') {
 
 // $19.99, not $20. Shelf prices, unit prices and anything a person reads off a ticket.
 export function price(cents, currency = 'NZD') {
+  if (typeof currency !== 'string') currency = 'NZD';
   if (cents === null || cents === undefined || cents === '') return '';
   const n = Number(cents) / 100;
   try {

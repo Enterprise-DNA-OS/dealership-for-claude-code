@@ -4,8 +4,10 @@ This file is the brain. Claude Code reads it at the start of every session. It s
 
 ## Who this is for
 
-- **Business:** [YOUR BUSINESS]
+- **Business:** [YOUR DEALERSHIP]
 - **Operator:** [YOUR NAME], [your role]
+- **Who signs off pricing changes on stock:** [name]
+- **Who runs the service-due call sheet, and how often:** [name, cadence]
 - **What matters most:** [the one or two outcomes you care about]
 
 Fill this in once. A worker with context knows. A worker without it guesses.
@@ -22,9 +24,32 @@ Fill this in once. A worker with context knows. A worker without it guesses.
 
 | When the operator asks for... | Use this |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| What needs my attention, what's wrong, morning check | `/attention` |
+| The yard, the lot, what's in stock, days in stock | `/lot` |
+| What has sat too long, the interest bill, reprice or auction | `/aged` |
+| Everything about a unit or a customer's car | `/vehicle` |
+| A trade-in or auction buy arriving | `/stock-in` |
+| The deals board, deposits, what's going cold | `/deals` |
+| Quote a car, take a deposit, deliver it, lose it | `/deal` |
+| Who sold what, true gross by salesperson | `/sales` |
+| Today in the workshop, the board | `/workshop` |
+| Who's due a service, the retention call sheet | `/service-due` |
+| Everything about a customer | `/customer` |
+| The customer list | `/customers` |
+| The staff, whose inspector authorisation is due | `/team` |
+| Who owes money | `/debtors` |
+| Finished work nobody billed | `/unbilled` |
+| Parts: what's low, out, receiving stock | `/parts` |
+| Are we compliant, check the rules | `/compliance` |
+| The Monday review | `/weekly-review` |
+| Note a call, a promise, a pricing decision | `/log` |
+| Draft the offer and sale paperwork message | `/draft-offer` |
+| Draft the service reminder messages | `/draft-service-reminders` |
+| Bring the data across from CDK | `/import` |
+| Change a field, a threshold, a rule, a document | `/customise` |
+| A new dashboard page | `/new-view` |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+If an ask fits nothing here, run the CLI directly (`npm run dealer -- help`) and then propose a new command for it.
 
 ## Hard rules
 

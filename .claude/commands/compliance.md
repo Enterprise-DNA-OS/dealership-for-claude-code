@@ -1,11 +1,8 @@
 ---
-description: Check the records against the rules this industry lives under (the ones listed in docs/compliance.md) and report what is missing, late, or about to breach, with the rule cited.
+description: The rule book run against the records - CIN on every unit offered, PPSR before delivery, WoF inside the month, inspector authorisations, AML customer due diligence on big cash, odometer readings, trader registration, repair order records. Each rule cites its source.
 ---
 
-1. Read `docs/compliance.md`. Each rule has a name, the source it comes from, what a breach looks like in the data, and the SQL or command that finds it.
-2. Run each check. Use the CLI's `--json` output or a direct query through `scripts/lib/db.mjs`.
-3. Report as a table: rule, count, the worst example (name and days), the source. Order by severity: breached first, then due within 7 days, then clean.
-4. For anything breached, draft the fix the operator can approve: the record to update, the notice to send (draft to `drafts/`, never send), or the task to add.
-5. If a rule in `docs/compliance.md` is out of date, say so and stop. Do not guess at law. The operator confirms the rule, then you update the doc and the check together.
-
-Nothing here is legal advice. The doc records the rules the operator has told the system to enforce, with sources, and this command checks the data against them.
+1. Run `node scripts/dealer.mjs compliance --json` (add a rule key for one rule).
+2. Present rule by rule: ok or the named breaches. For each breach, the one command or phone call that clears it.
+3. The sharpest rules are also gates in the CLI with no force flags; say so when a breach can only have come in through import - it means the old system allowed what this one refuses.
+4. Sources live in docs/compliance.md; nothing in it is legal advice, and the operator owns keeping the rules current.
