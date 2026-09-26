@@ -11,8 +11,8 @@
 <table align="center">
   <tr>
     <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your CDK Global data brought across.<br/><a href="https://calendly.com/sam-mckay/discovery-call">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/cdk">How it works</a></td>
+    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your CDK Global data brought across.<br/><a href="https://calendly.com/sam-mckay/discovery-call?utm_source=github&utm_medium=readme&utm_campaign=cdk">Book a call</a></td>
+    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/cdk?utm_source=github&utm_medium=readme&utm_campaign=cdk">How it works</a></td>
   </tr>
 </table>
 
@@ -41,7 +41,7 @@ Dealership for Claude Code does the job you pay CDK Global for, as a Postgres da
 
 The bill this replaces is not small. CDK's own materials put the average dealership's monthly spend near USD $30,000 once the usual ten to fifteen bolt-on modules are counted ([Software Advice's CDK Drive profile](https://www.softwareadvice.com/crm/cdk-drive-profile/)), and third-party tools pay CDK $175 to $700 a month per rooftop just to reach the dealer's own data ([DealerRefresh](https://forum.dealerrefresh.com/threads/cdk-third-party-access-pricing-guide.5345/)). In Australia and New Zealand the same play runs through Pentana eraPower and Titan DMS on unpublished per-rooftop quotes. And in June 2024, when CDK was hit by ransomware, roughly 15,000 dealerships could not sell a car or close a repair order for the better part of two weeks, because the operating record lived in someone else's cloud.
 
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://calendly.com/sam-mckay/discovery-call).
+Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://calendly.com/sam-mckay/discovery-call?utm_source=github&utm_medium=readme&utm_campaign=cdk).
 
 This one covers the operating record of a used-vehicle dealership with a workshop: the customers, the stock on the lot with its compliance paper (CIN, PPSR, WoF), the deals from quote to delivery, the repair orders, the parts shelf and the invoices. The New Zealand rules are built in as gates with their sources cited: a unit takes no deposit without a Consumer Information Notice, nothing delivers without a PPSR search, a WoF inspection only happens under a currently authorised inspector, and $10,000 of cash needs customer due diligence on record first. The general ledger and payroll stay with your accountant, deliberately; one export hands them everything.
 
@@ -159,8 +159,8 @@ Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a 
 
 Enterprise DNA installs Dealership for Claude Code for your business, migrates your CDK Global data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
 
-- Book a call: https://calendly.com/sam-mckay/discovery-call
-- Read more: https://enterprisedna.co/omni/instead-of/cdk
+- Book a call: https://calendly.com/sam-mckay/discovery-call?utm_source=github&utm_medium=readme&utm_campaign=cdk
+- Read more: https://enterprisedna.co/omni/instead-of/cdk?utm_source=github&utm_medium=readme&utm_campaign=cdk
 
 ## License
 
